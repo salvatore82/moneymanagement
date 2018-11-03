@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<project name="MoneyManagement" default="make_zip" basedir="..">
+
+	<property name="app.name" value="MoneyManagement" />
+	<property name="user.name" value="Salvatore De Luca" />
+
+	<property name="version.num" value="4.0" />
+	<property name="tmp.dir" value="E:/workspaceMio/ant/tmp" />
+	<property name="build.dir" value="${tmp.dir}/build" />
+	<property name="dist.dir" value="${tmp.dir}/dist" />
+	<property name="resources.dir" value="${dist.dir}/resources" />
+	<property name="data.dir" value="${dist.dir}/data" />
+
+	<property name="launch4j.dir" location="C:\Programmi\Launch4j" />
+
+	<target name="deploy">
+
+		<antcall target="clean_build" />
+		<delete dir="${dist.dir}" />
+		<mkdir dir="${build.dir}" />
+		<!-- Nel creare la cartella resources per le immagini, ti trovi automaticamente creata anche la dist.dir -->
+		<mkdir dir="${dist.dir}/resources" />
+		<mkdir dir="${dist.dir}/data" />
+		<mkdir dir="${dist.dir}/logs" />
+
+		<manifest file="MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}" />
+			<attribute name="Main-Class" value="it.moneymanagement.UI.frame.PrincipaleFrame" />
+			<attribute name="Implementation-Version" value="${version.num}" />
+		</manifest>
+
+		<copy todir="${build.dir}">
+			<fileset file="../moneymanagement/src/mm_conf.xml" />
+			<fileset file="../moneymanagement/src/spring-beans-3.0.xsd" />
+			<fileset file="../moneymanagement/src/log4j.xml" />
+			<fileset file="../moneymanagement/src/message.properties" />
+			<fileset dir="../moneymanagement/bin" includes="it/**/*.class" />
+			<fileset dir="../moneymanagement_business/bin" includes="it/**/*.class" />
+		</copy>
+
+		<copy todir="${resources.dir}">
+			<fileset dir="../moneymanagement/resources" includes="*/*.png" />
+			<fileset dir="../moneymanagement/resources" includes="*/*.jpg" />
+			<fileset dir="../moneymanagement/resources" includes="*/*.gif" />
+		</copy>
+		
+		<copy todir="${data.dir}">
+			<fileset dir="../moneymanagement/data_clean" includes="*" />
+			<fileset dir="../moneymanagement/data_clean" includes="*/*" />
+		</copy>
+
+		<jar destfile="${dist.dir}/${app.name}.jar" basedir="${build.dir}" manifest="MANIFEST.MF">
+			<zipfileset src="E:/workspaceMio/libraries/Commons/commons-collections.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Commons/commons-io-2.0.1.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/SLF4J/jcl-over-slf4j-1.6.1.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Log4J/log4j-1.2.16.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.asm-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.beans-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.context-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.core-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.expression-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.jdbc-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.transaction-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Spring/org.springframework.orm-3.0.5.RELEASE.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/SLF4J/slf4j-api-1.6.1.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/SLF4J/slf4j-log4j12-1.6.1.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Derby/derby.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/antlr-2.7.6.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/dom4j-1.6.1.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/hibernate3.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/hibernate-jpa-2.0-api-1.0.0.Final.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/javassist-3.12.0.GA.jar" />
+			<zipfileset src="E:/workspaceMio/libraries/Hibernate3/jta-1.1.jar" />
+		</jar>
+
+		<antcall target="clean_build" />
+
+	</target>
+
+	<target name="make_exe">
+		<antcall target="deploy" />
+		<!--Creo l'eseguibile con launch4j, ricorda di settare l'icona nel launch4j_mm_settings.xml-->
+		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+		<launch4j configFile="deploy/launch4j_mm_settings.xml" jar="${dist.dir}/${app.name}.jar" outfile="${dist.dir}/${app.name}.exe" />
+		<antcall target="clean_exe">
+		</antcall>
+	</target>
+
+	<target name="make_zip">
+		<antcall target="make_exe" />
+		<zip destfile="${dist.dir}/${app.name}.zip" basedir="${dist.dir}" update="true" />
+		<antcall target="clean_zip">
+		</antcall>
+	</target>
+
+	<target name="clean_build">
+		<delete dir="${build.dir}" />
+		<delete file="MANIFEST.MF" />
+	</target>
+
+	<target name="clean_exe">
+		<delete file="${dist.dir}/${app.name}.jar" />
+	</target>
+
+	<target name="clean_zip">
+		<delete file="${dist.dir}/${app.name}.exe" />
+		<delete dir="${resources.dir}" />
+	</target>
+
+</project>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans spring-beans-3.0.xsd">
+
+	<!-- RESOURCES -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource" lazy-init="true">
+		<property name="basename" value="message" />
+	</bean>
+
+	<!-- DATASOURCE -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="true">
+		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+		<property name="url" value="jdbc:derby:data" />
+	</bean>
+
+	<!-- Session Factory da utilizzare per mapping attraverso JPA Annotations -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" lazy-init="true">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>it.moneymanagement.business.dao.entity.TransaxionSubtypeEntity
+				</value>
+				<value>it.moneymanagement.business.dao.entity.TransaxionTypeEntity
+				</value>
+				<value>it.moneymanagement.business.dao.entity.IncomeEntity</value>
+				<value>it.moneymanagement.business.dao.entity.OutcomeEntity</value>
+				<value>it.moneymanagement.business.dao.entity.TransaxionEntity
+				</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.lazy">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- DAO -->
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
+		lazy-init="true">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean name="transaxionSubtypeDao"
+		class="it.moneymanagement.business.dao.TransaxionSubtypeDao"
+		lazy-init="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+	<bean name="transaxionTypeDao"
+		class="it.moneymanagement.business.dao.TransaxionTypeDao"
+		lazy-init="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+	<bean name="transaxionDao" class="it.moneymanagement.business.dao.TransaxionDao"
+		lazy-init="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+	<bean name="incomeDao" class="it.moneymanagement.business.dao.IncomeDao"
+		lazy-init="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+	<bean name="outcomeDao" class="it.moneymanagement.business.dao.OutcomeDao"
+		lazy-init="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+	<!-- FACADE -->
+	<bean name="businessDelegate"
+		class="it.moneymanagement.business.BusinessDelegate"
+		lazy-init="true">
+		<property name="transaxionSubtypeDao" ref="transaxionSubtypeDao" />
+		<property name="transaxionTypeDao" ref="transaxionTypeDao" />
+		<property name="transaxionDao" ref="transaxionDao" />
+		<property name="incomeDao" ref="incomeDao" />
+		<property name="outcomeDao" ref="outcomeDao" />
+	</bean>
+
+	<!-- UI -->
+	<bean name="headerPanel" class="it.moneymanagement.UI.panel.HeaderPanel"
+		init-method="initComponents" />
+	<bean name="contentPanel" class="it.moneymanagement.UI.panel.ContentPanel"
+		init-method="initComponents" />
+	<bean name="principaleMenuBar" class="it.moneymanagement.UI.menubar.PrincipaleMenuBar"
+		init-method="initComponents" lazy-init="true">
+		<property name="principalePanel" ref="principalePanel" />
+		<property name="headerPanel" ref="headerPanel" />
+		<property name="contentPanel" ref="contentPanel" />
+		<property name="insertEntrataPanel" ref="insertEntrataPanel" />
+		<property name="cercaEntrataPanel" ref="cercaEntrataPanel" />
+		<property name="insertUscitaPanel" ref="insertUscitaPanel" />
+		<property name="cercaUscitaPanel" ref="cercaUscitaPanel" />
+		<property name="insertTipoTransazionePanel" ref="insertTipoTransazionePanel" />
+		<property name="riepilogoPanel" ref="riepilogoPanel" />
+		<property name="impostazioniDBPanel" ref="impostazioniDBPanel" />
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+	<bean name="principalePanel" class="it.moneymanagement.UI.panel.PrincipalePanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="headerPanel" ref="headerPanel" />
+		<property name="contentPanel" ref="contentPanel" />
+	</bean>
+	<bean name="insertEntrataPanel" class="it.moneymanagement.UI.panel.inner.InsertEntrataPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="data" ref="observingTextField" />
+		<property name="dataPicker" ref="datePicker" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="insertUscitaPanel" class="it.moneymanagement.UI.panel.inner.InsertUscitaPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="data" ref="observingTextField" />
+		<property name="dataPicker" ref="datePicker" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="cercaEntrataPanel" class="it.moneymanagement.UI.panel.inner.CercaEntrataPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="deleteFromTable" ref="deleteFromTable" />
+		<property name="transazioniTableModel" ref="transazioniEntrataTableModel" />
+		<property name="dataDa" ref="observingTextField" />
+		<property name="dataPickerDa" ref="datePicker" />
+		<property name="dataA" ref="observingTextField" />
+		<property name="dataPickerA" ref="datePicker" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="cercaUscitaPanel" class="it.moneymanagement.UI.panel.inner.CercaUscitaPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="deleteFromTable" ref="deleteFromTable" />
+		<property name="transazioniTableModel" ref="transazioniUscitaTableModel" />
+		<property name="dataDa" ref="observingTextField" />
+		<property name="dataPickerDa" ref="datePicker" />
+		<property name="dataA" ref="observingTextField" />
+		<property name="dataPickerA" ref="datePicker" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="insertTipoTransazionePanel"
+		class="it.moneymanagement.UI.panel.inner.InsertTipoTransazionePanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="riepilogoPanel" class="it.moneymanagement.UI.panel.inner.RiepilogoPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="dataDa" ref="observingTextField" />
+		<property name="dataPickerDa" ref="datePicker" />
+		<property name="dataA" ref="observingTextField" />
+		<property name="dataPickerA" ref="datePicker" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="transazioniTableModel" ref="transazioniRiepilogoTableModel" />
+		<property name="imageMouseListener" ref="imageMouseListener" />
+	</bean>
+	<bean name="impostazioniDBPanel" class="it.moneymanagement.UI.panel.inner.ImpostazioniDBPanel"
+		init-method="initComponents" lazy-init="true">
+		<property name="messageSource" ref="messageSource" />
+		<property name="dbManagement" ref="dbManagement" />
+	</bean>
+
+	<!-- UI MODELS -->
+	<bean name="transazioniEntrataTableModel"
+		class="it.moneymanagement.UI.models.TransazioniEntrataTableModel"
+		init-method="initComponents" lazy-init="true">
+		<property name="messageSource" ref="messageSource" />
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="transazioniUscitaTableModel"
+		class="it.moneymanagement.UI.models.TransazioniUscitaTableModel"
+		init-method="initComponents" lazy-init="true">
+		<property name="messageSource" ref="messageSource" />
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="checkRegularText" ref="checkRegularText" />
+	</bean>
+	<bean name="transazioniRiepilogoTableModel"
+		class="it.moneymanagement.UI.models.TransazioniRiepilogoTableModel"
+		init-method="initComponents" lazy-init="true">
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+	<!-- UI COMPONENT -->
+	<bean name="deleteFromTable" class="it.moneymanagement.UI.actions.DeleteFromTable"
+		lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="cercaUscitaPanel" ref="cercaUscitaPanel" />
+	</bean>
+	<!-- Lo scope prototype assicura che non venga fatta una singleton su questi 
+		oggetti (opzione di default per Spring), ma che venga creato nuovo per ogni 
+		chiamata. Serve farlo così perchè ogni campo di tipo data con il 
+		picker implementa l'observer (un listener sull'onchange) che si aggiorna 
+		in quanto bindato col il picker associato. Se si lasciasse l'opzione di default, 
+		il risultato sarebbe che chi arriva prima si prende il campo data, mentre 
+		gli altri avranno solo il picker -->
+	<bean name="datePicker" class="it.moneymanagement.UI.component.DatePicker"
+		scope="prototype" lazy-init="true">
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+	<bean name="observingTextField" class="it.moneymanagement.UI.component.ObservingTextField"
+		scope="prototype" />
+	
+	<!-- Grafico, anche qui è necessario lo scope prototype perchè i grafici sono vari e riguardano transazioni diverse,
+	     ognuno con i suoi valori -->
+	<bean name="diagramma" class="it.moneymanagement.UI.chart.Diagramma"
+		scope="prototype" lazy-init="true">
+	</bean>
+	
+	<!-- UI LISTENERS -->
+	<bean name="imageMouseListener" class="it.moneymanagement.UI.listeners.ImageMouseListener"
+		lazy-init="true">
+		<property name="businessDelegate" ref="businessDelegate" />
+		<property name="riepilogoPanel" ref="riepilogoPanel" />
+		<property name="webDateFormat" ref="webDateFormat" />
+		<property name="moneyFormat" ref="moneyFormat" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="diagramma" ref="diagramma" />
+	</bean>
+
+	<!-- UTILITIES -->
+	<bean name="dbDateFormat" class="it.moneymanagement.utils.format.DbDateFormat" />
+	<bean name="webDateFormat" class="it.moneymanagement.utils.format.WebDateFormat" />
+	<bean name="moneyFormat" class="it.moneymanagement.utils.format.MoneyFormat" />
+	<bean name="dbManagement" class="it.moneymanagement.dbmgmt.DBManagement" />
+	<bean name="checkRegularText" class="it.moneymanagement.utils.CheckRegularText" />
+
+</beans>
