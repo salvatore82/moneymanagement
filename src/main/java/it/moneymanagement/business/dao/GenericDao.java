@@ -38,7 +38,7 @@ public class GenericDao<Entity, IdType> extends HibernateDaoSupport {
 	}
 
 	/**
-	 * Il metodo necessita dell'entit� correttamente popolata, quindi bisogna eseguire una ricerca dell'oggetto specifico e poi passarlo al metodo
+	 * Il metodo necessita dell'entità correttamente popolata, quindi bisogna eseguire una ricerca dell'oggetto specifico e poi passarlo al metodo
 	 * @param entity
 	 */
 	@Transactional

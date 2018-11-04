@@ -281,9 +281,9 @@ public class InsertEntrataPanel extends JPanel {
 			} catch (Exception e) {
 				logger
 						.error(
-								"Si � verificato un errore durante l'inserimento della transazione",
+								"Si è verificato un errore durante l'inserimento della transazione",
 								e);
-				message = "Si � verificato un errore durante l'inserimento della transazione";
+				message = "Si è verificato un errore durante l'inserimento della transazione";
 				esitoOperazione = false;
 				getEsito().setForeground(new Color(195, 37, 37));
 				getEsito().setIcon(new ImageIcon("resources/images/cross.png"));

@@ -195,9 +195,9 @@ public class InsertTipoTransazionePanel extends JPanel {
 			} catch (Exception e) {
 				logger
 						.error(
-								"Si � verificato un errore durante l'inserimento del tipo transazione",
+								"Si è verificato un errore durante l'inserimento del tipo transazione",
 								e);
-				message = "Si � verificato un errore durante l'inserimento del tipo transazione";
+				message = "Si è verificato un errore durante l'inserimento del tipo transazione";
 				esitoOperazione = false;
 				getEsito().setForeground(new Color(195, 37, 37));
 				getEsito().setIcon(new ImageIcon("resources/images/cross.png"));

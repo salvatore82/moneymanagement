@@ -24,7 +24,7 @@ public class DocumentSizeFilter extends DocumentFilter {
 			super.insertString(fb, offs, str, a);
 		} else
 		{
-			logger.debug("Lunghezza testo non valida, " + lunghezza + " � maggiore di " + maxCharacters);
+			logger.debug("Lunghezza testo non valida, " + lunghezza + " è maggiore di " + maxCharacters);
 			Toolkit.getDefaultToolkit().beep();
 		}
 			
@@ -37,7 +37,7 @@ public class DocumentSizeFilter extends DocumentFilter {
 			super.replace(fb, offs, length, str, a);
 		} else
 		{
-			logger.debug("Lunghezza testo non valida, " + lunghezza + " � maggiore di " + maxCharacters);
+			logger.debug("Lunghezza testo non valida, " + lunghezza + " è maggiore di " + maxCharacters);
 			Toolkit.getDefaultToolkit().beep();
 		}
 	}

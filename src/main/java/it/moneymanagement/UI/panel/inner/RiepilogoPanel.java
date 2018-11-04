@@ -88,7 +88,7 @@ public class RiepilogoPanel extends JPanel {
 
 	public void initComponents() {
 		setBackground(Color.WHITE);
-		setMoneySymbol(getMessageSource().getMessage("label.moneySymbol", null, "�", Locale.getDefault()));
+		setMoneySymbol(getMessageSource().getMessage("label.moneySymbol", null, "€", Locale.getDefault()));
 		
 		// CAMPI FORM
 		JPanel fields = new JPanel();

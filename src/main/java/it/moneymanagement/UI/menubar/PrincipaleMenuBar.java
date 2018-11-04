@@ -398,11 +398,11 @@ public class PrincipaleMenuBar extends JMenuBar {
 	 */
 	private void aboutAction(ActionEvent event) {
 		StringBuilder testo = new StringBuilder();
-		testo.append("Money Management � un'applicazione nata per gestire l'economia del singolo/famiglia.");
+		testo.append("Money Management è un'applicazione nata per gestire l'economia del singolo/famiglia.");
 		testo.append("\n");
 		testo.append("Version: 4.0");
 		testo.append("\n");
-		testo.append("�Salvatore De Luca 2011.  Tutti i diritti riservati.");
+		testo.append("© Salvatore De Luca 2011.  Tutti i diritti riservati.");
 		
 		JOptionPane.showMessageDialog(getPrincipalePanel(), testo, getMessageSource().getMessage("app.title", null, "Money Management" , Locale.getDefault()), JOptionPane.DEFAULT_OPTION, new ImageIcon("resources/images/header_l.png"));
 	}

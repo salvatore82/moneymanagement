@@ -139,7 +139,7 @@ public class ImpostazioniDBPanel extends JPanel {
 				getEsito().setIcon(new ImageIcon("resources/images/ok.png"));
 				getEsito().setForeground(new Color(58, 134, 197));
 			} catch (IOException e) {
-				message = "Si � verificato un errore durante il backup del database";
+				message = "Si è verificato un errore durante il backup del database";
 				logger.error(message,e);
 				getEsito().setForeground(new Color(195, 37, 37));
 				getEsito().setIcon(new ImageIcon("resources/images/cross.png"));

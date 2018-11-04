@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.jfree.ui.RefineryUtilities;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import it.moneymanagement.dbmgmt.DBManagement;
 
 public class PrincipaleFrame extends JFrame {
 
-	private static final String PREFERRED_LOOK_AND_FEEL = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+	//private static final String PREFERRED_LOOK_AND_FEEL = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(PrincipaleFrame.class);
 	private BeanFactory ctx;
@@ -49,18 +50,31 @@ public class PrincipaleFrame extends JFrame {
 
 	private static void installLnF() {
 		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            logger.debug("Look and Feel impostato correttamente");
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+			logger.error("Problemi nell'impostazione del Look and Feel su questa piattaforma, setto default", e);
+		}
+		
+		/*try {
 			UIManager.setLookAndFeel(PREFERRED_LOOK_AND_FEEL);
 			logger.debug("Look and Feel impostato correttamente");
 		} catch (Exception e) {
 			logger.error("Problemi nell'impostazione del Look and Feel su questa piattaforma, setto default", e);
-		}
+		}*/
 	}
 	
 	private static void disableDerbyLog() {
 		try {
 			System.setProperty("derby.stream.error.field", "it.moneymanagement.dbmgmt.DBManagement.DEV_NULL");
 		} catch (Exception e) {
-			logger.error("Si � verificato un errore durante l'inizializzazione del database.",e);
+			logger.error("Si è verificato un errore durante l'inizializzazione del database.",e);
 		}
 	}
 

@@ -98,8 +98,8 @@ public class TransazioniEntrataTableModel extends DefaultTableModel {
 				getBusinessDelegate().updateTransaxion(incomeEntity.getTransaxion());
 			}
 			
-			//Aggiorno la tabella mostrata a video in ogni caso: se tutto � andato bene setto i nuovo valori, altrimenti riassegno i vecchi valori
-			//perch� il dataVector � cambiato e mostra anche i valori scorretti, ma solo a video (l'update sul DB non verrebbe comunque effettuata)
+			//Aggiorno la tabella mostrata a video in ogni caso: se tutto è andato bene setto i nuovo valori, altrimenti riassegno i vecchi valori
+			//perchè il dataVector è cambiato e mostra anche i valori scorretti, ma solo a video (l'update sul DB non verrebbe comunque effettuata)
 			data.setElementAt(getWebDateFormat().format(incomeEntity.getTransaxion().getDate()), 2);
 			data.setElementAt(incomeEntity.getTransaxion().getDescription(), 4);
 			data.setElementAt(getMoneyFormat().format(incomeEntity.getTransaxion().getValue()), 5);
